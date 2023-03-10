@@ -1,0 +1,114 @@
+---
+title: "Psyche_rolling"
+author: "JB Camps"
+date: "19/06/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Small corpus
+
+```{r}
+#Prepping for Psyché
+labels = read.csv("scenes_psyche.csv")
+acts = read.csv("acts_psyche.csv")
+```
+
+
+## Size 150, step 1
+```{r, fig.width=10, fig.height=7}
+# Prepare data
+dists = read.csv("FINAL_PREDICTIONS_small150v.csv")
+# Get average point
+x = lapply(strsplit(sub(pattern = "^[^_]+\\_", "", dists[,2]), "-"), as.numeric)
+x = lapply(x, mean)
+#Plot
+plot(x, dists[,4], type="l", ylim = c(-1,0), xlim=c(0,2134), lty=2, ylab = "decision function", xlab = "verses", sub="Small genre-specific | Sample size 150, step 1")
+lines(x, dists[,5], col="red")
+#lines(x, dists[,6], col="pink", lty=2)
+lines(x, dists[,6], col="grey", lty=2)
+lines(x, dists[,7], col="green")
+lines(x, dists[,8], col="blue")
+
+legend(1,0, legend=c("Boyer","P. Corneille","Donneau", "Molière", "Quinault"), col=c("black","red", "grey", "green", "blue"), lty=c(2,1,2,1,1), ncol=1)
+abline(v=labels[,2], col="grey", lty=2)
+text(x = acts[,2], y = c(-1,-1,-1,-1,-1,-1),  acts[,1], srt=90)
+text(x = labels[,2], y = c(-0.9,-0.9,-0.9,-0.9,-0.9,-0.9),  sub("scene","s", labels[,1]), srt=90, cex=0.8)
+```
+
+# Big corpus
+
+## Size 150, step 1
+
+```{r, fig.width=10, fig.height=7}
+# Prepare data
+dists = read.csv("FINAL_PREDICTIONS_big150v.csv")
+# Get average point
+x = lapply(strsplit(sub(pattern = "^[^_]+\\_", "", dists[,2]), "-"), as.numeric)
+x = lapply(x, mean)
+#Plot
+plot(x, dists[,4], type="l", ylim = c(-2.3,max(dists[,4:9])), xlim=c(0,2134), lty=2, ylab = "decision function", xlab = "verses", sub="Big cross-genre | Sample size 150, step 1")
+lines(x, dists[,5], col="red")
+lines(x, dists[,6], col="pink", lty=2)
+lines(x, dists[,7], col="grey", lty=2)
+lines(x, dists[,8], col="green")
+lines(x, dists[,9], col="blue")
+
+legend(0,1.2, legend=c("Boyer","P. Corneille","Th. Corneille", "Donneau", "Molière", "Quinault"), col=c("black","red","pink", "grey", "green", "blue"), lty=c(2,1,2,2,1,1), ncol=1)
+abline(v=labels[,2], col="grey", lty=2)
+text(x = acts[,2], y = c(-2.3,-2.3,-2.3,-2.3,-2.3,-2.3),  acts[,1], srt=90)
+text(x = labels[,2], y = c(-2,-2,-2,-2,-2,-2),  sub("scene","s", labels[,1]), srt=90, cex=0.8)
+```
+
+# Big setup on unseen plays
+
+## Circé 
+
+```{r, fig.width=10, fig.height=7}
+# Prepare data
+dists = read.csv("FINAL_PREDICTIONS_circe.csv")
+# Get average point
+x = lapply(strsplit(sub(pattern = "^[^_]+\\_", "", dists[,2]), "-"), as.numeric)
+x = lapply(x, mean)
+labels = read.csv("scenes_circe.csv")
+acts = read.csv("acts_circe.csv")
+#Plot
+plot(x, dists[,4], type="l", ylim = c(min(dists[,4:9])-0.3,max(dists[,4:9])), xlim=c(0,3008), lty=2, ylab = "decision function", xlab = "verses", sub="Big cross-genre | Sample size 150, step 1", main = "Circé", col="grey")
+lines(x, dists[,5], col="lightpink", lty=2)
+lines(x, dists[,6], col="hotpink4")
+lines(x, dists[,7], col="black")
+lines(x, dists[,8], col="lightgreen", lty=2)
+lines(x, dists[,9], col="blue", lty=2)
+
+legend(0,1.4, legend=c("Boyer","P. Corneille","Th. Corneille", "Donneau", "Molière", "Quinault"), col=c("grey","lightpink","hotpink4", "black", "lightgreen", "blue"), lty=c(2,2,1,1,2,2), ncol=1)
+abline(v=labels[,2], col="grey", lty=2)
+text(x = acts[,2], y = rep(min(dists[,4:9])-0.2,nrow(acts)),  acts[,1], srt=90)
+text(x = labels[,2], y = rep(min(dists[,4:9])+0.1, length(labels[,2])),  sub("scene","s", labels[,1]), srt=90, cex=0.9)
+```
+
+## Inconnu 
+
+```{r, fig.width=10, fig.height=7}
+# Prepare data
+dists = read.csv("FINAL_PREDICTIONS_Inconnu.csv")
+# Get average point
+x = lapply(strsplit(sub(pattern = "^[^_]+\\_", "", dists[,2]), "-"), as.numeric)
+x = lapply(x, mean)
+labels = read.csv("scenes_inconnu.csv")
+acts = read.csv("acts_inconnu.csv")
+#Plot
+plot(x, dists[,4], type="l", ylim = c(min(dists[,4:9])-0.3,2), xlim=c(0,2308), lty=2, ylab = "decision function", xlab = "verses", sub="Big cross-genre | Sample size 150, step 1", main = "Inconnu", col="grey")
+lines(x, dists[,5], col="lightpink", lty=2)
+lines(x, dists[,6], col="hotpink4")
+lines(x, dists[,7], col="black")
+lines(x, dists[,8], col="lightgreen", lty=2)
+lines(x, dists[,9], col="blue", lty=2)
+
+legend(0,2.2, legend=c("Boyer","P. Corneille","Th. Corneille", "Donneau", "Molière", "Quinault"), col=c("grey","lightpink","hotpink4", "black", "lightgreen", "blue"), lty=c(2,2,1,1,2,2), ncol=1, cex = 0.8)
+abline(v=labels[,2], col="grey", lty=2)
+text(x = acts[,2], y = rep(min(dists[,4:9])-0.2,nrow(acts)),  acts[,1], srt=90)
+text(x = labels[,2], y = rep(min(dists[,4:9])+0.1, length(labels[,2])),  sub("scene","s", labels[,1]), srt=90, cex=0.8)
+```
